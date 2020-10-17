@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int endingColumn;
     private int currentRow;
     private int currentColumn;
+    double najkrotszyDystans;
     double[][] dystansOdStartu = new double[10][6];
     double[][] dystansDoKonca = new double[10][6];
     double[][] sumaDystansow = new double[10][6];
@@ -138,74 +139,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sprawdzOtoczenie(int x, int y) {
-        double najkrotszyDystans =1000;
+        najkrotszyDystans =1000;
         if(x<9){
-            dystansDoKonca[x+1][y] = obliczDystans(endingRow, endingColumn, x+1, y);
-            if(najkrotszyDystans>dystansDoKonca[x+1][y]){
-                najkrotszyDystans=dystansDoKonca[x+1][y];
-                currentRow=x+1;
-                currentColumn=y;
-            }
+            calculateDistanceAndCheck( x+1, y);
             if(y<5) {
-                dystansDoKonca[x + 1][y + 1] = obliczDystans(endingRow, endingColumn, x + 1, y + 1);
-                if(najkrotszyDystans>dystansDoKonca[x+1][y+1]){
-                    najkrotszyDystans=dystansDoKonca[x+1][y+1];
-                    currentRow=x+1;
-                    currentColumn=y+1;
-                }
+                calculateDistanceAndCheck( x+1, y+1);
             }
             if(y>0){
-                dystansDoKonca[x+1][y-1] = obliczDystans(endingRow, endingColumn, x+1, y-1);
-                if(najkrotszyDystans>dystansDoKonca[x+1][y-1]){
-                    najkrotszyDystans=dystansDoKonca[x+1][y-1];
-                    currentRow=x+1;
-                    currentColumn=y-1;
-                }
+                calculateDistanceAndCheck( x+1, y-1);
             }
         }
         if(x>0){
-            dystansDoKonca[x-1][y] = obliczDystans(endingRow, endingColumn, x-1, y);
-            if(najkrotszyDystans>dystansDoKonca[x-1][y]){
-                najkrotszyDystans=dystansDoKonca[x-1][y];
-                currentRow=x-1;
-                currentColumn=y;
-            }
+            calculateDistanceAndCheck( x-1, y);
 
             if(y<5){
-                dystansDoKonca[x-1][y+1] = obliczDystans(endingRow, endingColumn, x-1, y+1);
-                if(najkrotszyDystans>dystansDoKonca[x-1][y+1]){
-                    najkrotszyDystans=dystansDoKonca[x-1][y+1];
-                    currentRow=x-1;
-                    currentColumn=y+1;
-                }
+                calculateDistanceAndCheck( x-1, y+1);
             }
             if(y>0){
-                dystansDoKonca[x-1][y-1] = obliczDystans(endingRow, endingColumn, x-1, y-1);
-                if(najkrotszyDystans>dystansDoKonca[x-1][y-1]){
-                    najkrotszyDystans=dystansDoKonca[x-1][y-1];
-                    currentRow=x-1;
-                    currentColumn=y-1;
-                }
+                calculateDistanceAndCheck( x-1, y-1);
             }
         }
         if(y<5){
-            dystansDoKonca[x][y+1] = obliczDystans(endingRow, endingColumn, x, y+1);
-            if(najkrotszyDystans>dystansDoKonca[x][y+1]){
-                najkrotszyDystans=dystansDoKonca[x][y+1];
-                currentRow=x;
-                currentColumn=y+1;
-            }
+            calculateDistanceAndCheck( x, y+1);
         }
 
         if(y>0){
-            dystansDoKonca[x][y-1] = obliczDystans(endingRow, endingColumn, x, y-1);
-            if(najkrotszyDystans>dystansDoKonca[x][y-1]){
-                najkrotszyDystans=dystansDoKonca[x][y-1];
-                currentRow=x;
-                currentColumn=y-1;
-            }
+            calculateDistanceAndCheck( x, y-1);
         }
 
     }
+    private void calculateDistanceAndCheck(int _x, int _y) {
+        dystansDoKonca[_x][_y] = obliczDystans(endingRow, endingColumn, _x, _y);
+        double tempDist=obliczDystans(startingRow, startingColumn, _x, _y);
+        if(dystansOdStartu[_x][_y]>tempDist || dystansOdStartu[_x][_y]==0)
+        dystansOdStartu[_x][_y] = tempDist;
+        if(najkrotszyDystans>dystansDoKonca[_x][_y]){
+            najkrotszyDystans=dystansDoKonca[_x][_y];
+            currentRow=_x;
+            currentColumn=_y;
+        }
 
+
+    }
 }
